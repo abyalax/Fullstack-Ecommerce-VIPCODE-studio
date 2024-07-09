@@ -4,14 +4,15 @@ import { FormEvent } from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-// import { redirect } from "next/navigation";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 const LoginView = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const {push, query} = useRouter();
- 
-    const callbackUrl: any  = query.callbackUrl || '/';
+    const { push, query } = useRouter();
+
+    const callbackUrl: any = query.callbackUrl || '/';
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -49,19 +50,13 @@ const LoginView = () => {
             {error && <p className={styles.login__error}>{error}</p>}
             <div className={styles.login__form}>
                 <form id="register" onSubmit={handleRegister}>
-                    <div className={styles.login__form__item}>
-                        <label htmlFor="email">Email</label>
-                        <input name="email" id="email" type="email" className={styles.login__form__item__input} />
-                    </div>
-                    <div className={styles.login__form__item}>
-                        <label htmlFor="password">Password</label>
-                        <input name="password" id="password" type="password" className={styles.login__form__item__input} />
-                    </div>
-                    <button type="submit" className={styles.login__form__button}>{isLoading ? 'Loading...' : 'Login'}</button>
+                    <Input label="Email" name="email" type="email" placholder="Masukkan email" />
+                    <Input label="Pasword" name="password" type="password" placholder="**********" />
+                    <Button type="submit" className={styles.login__form__button}>{isLoading ? 'Loading...' : 'Login'}</Button>
                 </form>
-                <hr className={styles.login__form__devider}/>
+                <hr className={styles.login__form__devider} />
                 <div className={styles.login__form__other}>
-                    <button type="button" onClick={() => signIn('google', {callbackUrl, redirect: false})} className={styles.login__form__other__button}><i className='bx bxl-google'/>Login With Google</button>
+                    <Button type="button" className={styles.login__form__other__button} onClick={() => signIn('google', { callbackUrl, redirect: false })}><i className='bx bxl-google' />Login With Google</Button>
                 </div>
             </div>
             <p className={styles.login__link}>{"Don't Have an Account ? Sign Up "}<Link href={"/auth/register"}>Here</Link> </p>
