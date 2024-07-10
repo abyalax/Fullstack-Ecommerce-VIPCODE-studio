@@ -2,7 +2,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
-import { loginWithGoogle, signIn } from "@/services/auth";
+// import { loginWithGoogle, signIn } from "@/services/auth";
+import { loginWithGoogle, signIn } from "@/services/auth/services";
 
 const authOptions: NextAuthOptions = {
     session: {
