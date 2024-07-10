@@ -7,8 +7,13 @@
     justify-content: center;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 700;
 }
 .primary {
     background-color: #000;
     color: white;
+}
+.secondary {
+    background-color: white;
+    color: #000;
 }

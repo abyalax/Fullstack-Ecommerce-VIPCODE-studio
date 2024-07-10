@@ -1,4 +1,3 @@
-import Link from "next/link"
 import styles from "./Register.module.scss"
 import { FormEvent } from "react";
 import { useState } from "react";
