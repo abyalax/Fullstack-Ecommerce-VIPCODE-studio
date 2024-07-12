@@ -1,4 +1,4 @@
-import WithAuth from "./middlewares/withAuth";
+import withAuth from "@/middlewares/withAuth";
 import { NextResponse } from "next/server";
 
 export function mainMiddleware() {
@@ -6,7 +6,7 @@ export function mainMiddleware() {
     return res
 }
 
-export default WithAuth(
+export default withAuth(
     mainMiddleware, 
     ["admin", "user"]
 )
