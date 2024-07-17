@@ -3,10 +3,19 @@ import Input from "@/components/ui/Input"
 import Modal from "@/components/ui/Modal"
 import Select from "@/components/ui/Select"
 import userServices from "@/services/user"
-import { FormEvent, useState } from "react"
+import { User } from "@/types/user.type"
+import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 
-const ModalUpdateUser = (props: any) => {
-    const { updatedUser, setUpdatedUser, setUsersData } = props
+type PropTypes = {
+    setUsersData: Dispatch<SetStateAction<User[]>>
+    setToaster: Dispatch<SetStateAction<{}>>
+    updatedUser: User | any
+    setUpdatedUser: Dispatch<SetStateAction<{}>>
+    session:any
+}
+
+const ModalUpdateUser = (props: PropTypes) => {
+    const { updatedUser, setUpdatedUser, setUsersData, setToaster, session } = props
     const [isLoading, setIsLoading] = useState(false)
     const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -15,27 +24,32 @@ const ModalUpdateUser = (props: any) => {
         const data = {
             role: form.role.value,
         }
-        const result = await userServices.updateUser(updatedUser.id, data);
-        console.log(result)
+        const result = await userServices.updateUser(updatedUser.id, data, session.data?.accessToken);
     }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         const form = document.getElementById("form") as HTMLFormElement;
         const formData = new FormData(form);
-
         const data = {
             role:formData.get('role'),
         }
-        
-        const result = await userServices.updateUser(updatedUser.id, data);
+        const result = await userServices.updateUser(updatedUser.id, data, session.data?.accessToken);
         if (result.status === 200) {
             setIsLoading(false);
             setUpdatedUser({});
             const {data} = await userServices.getAllUsers()
             setUsersData(data.data)
+            setToaster({
+                variant:'success',
+                message: 'Succes Update User'
+            })
         } else {
             setIsLoading(false);
+            setToaster({
+                variant:'danger',
+                message: 'Failed Update User'
+            })
         }
     }
     return (
@@ -51,7 +65,9 @@ const ModalUpdateUser = (props: any) => {
                         { label: "Member", value: "member" }
                     ]
                 }></Select>
-                <Button type="submit">Edit</Button>
+                <Button type="submit">
+                    {isLoading ? 'Updating...' : 'Update'}
+                </Button>
             </form>
         </Modal>
     )

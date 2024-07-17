@@ -1,17 +1,23 @@
 import AdminLayout from "@/components/layouts/AdminLayouths"
 import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalDeleteUser from "./ModalDeleteUser";
+import { User } from "@/types/user.type";
+import { useSession } from "next-auth/react";
 
+type PropTypes = {
+    users: User[],
+    setToaster: Dispatch<SetStateAction<{}>>,
+}
 
-
-const UserAdminView = (props: any) => {
-    const { users } = props
-    const [ updatedUser, setUpdatedUser ] = useState<any>({})
-    const [deletedUser, setDeletedUser] = useState<any>({})
-    const [usersData, setUsersData] = useState([])
+const UserAdminView = (props: PropTypes) => {
+    const session: any = useSession();
+    const { users, setToaster} = props
+    const [ updatedUser, setUpdatedUser ] = useState<User | {}>({})
+    const [deletedUser, setDeletedUser] = useState<User | {}>({})
+    const [usersData, setUsersData] = useState<User[]>([])
 
     useEffect(() => {
         setUsersData(users)
@@ -34,7 +40,7 @@ const UserAdminView = (props: any) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {usersData.map((user: any, index: number) => (
+                            {usersData.map((user: User, index: number) => (
                                 <tr key={user.id}>
                                     <td>{index + 1}</td>
                                     <td>{user.fullname}</td>
@@ -54,10 +60,20 @@ const UserAdminView = (props: any) => {
                 </div>
             </AdminLayout>
             {Object.keys(updatedUser).length && (
-                <ModalUpdateUser updatedUser={updatedUser} setUpdatedUser={setUpdatedUser} setUsersData={setUsersData}/>
+                <ModalUpdateUser 
+                updatedUser={updatedUser} 
+                setUpdatedUser={setUpdatedUser} 
+                setUsersData={setUsersData}
+                setToaster={setToaster}
+                session={session}/>
             )}
             {Object.keys(deletedUser).length && (
-                <ModalDeleteUser deletedUser={deletedUser} setDeletedUser={setDeletedUser} setUsersData={setUsersData}/>
+                <ModalDeleteUser 
+                deletedUser={deletedUser} 
+                setDeletedUser={setDeletedUser} 
+                setUsersData={setUsersData}
+                setToaster={setToaster}
+                session={session}/>
             )}
         </>
     )

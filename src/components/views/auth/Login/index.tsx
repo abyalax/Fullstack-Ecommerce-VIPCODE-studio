@@ -1,5 +1,5 @@
 import styles from "./Login.module.scss"
-import { FormEvent } from "react";
+import { Dispatch, FormEvent, SetStateAction } from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
@@ -7,23 +7,16 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Authlayout from "@/components/layouts/AuthLayouts";
 
-const LoginView = () => {
+const LoginView = ({setToaster} : {setToaster: Dispatch<SetStateAction<{}>>}) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
     const { push, query } = useRouter();
 
     const callbackUrl: any = query.callbackUrl || '/';
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setError('')
         const form = document.getElementById("register") as HTMLFormElement;
         const formData = new FormData(form);
-
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
         try {
             const res = await signIn("credentials", {
                 redirect: false,
@@ -35,17 +28,31 @@ const LoginView = () => {
                 setIsLoading(false);
                 form.reset()
                 push(callbackUrl)
+                setToaster({
+                    variant: 'success',
+                    message: 'Login Success'
+                })
             } else {
                 setIsLoading(false);
-                setError("Email or Password is incorrect");
+                setToaster({
+                    variant: 'danger',
+                    message: 'Email or Password is incorrect'
+                })
             }
         } catch (error) {
             setIsLoading(false);
-            setError("Email or Password is incorrect");
+            setToaster({
+                variant: 'danger',
+                message: 'Login Failed, please call support'
+            })
         }
     }
     return (
-        <Authlayout title="Login" link="/auth/register" linkText={"Don't Have an Account ? Sign Up "}>
+        <Authlayout 
+        setToaster={setToaster} 
+        title="Login" 
+        link="/auth/register" 
+        linkText={"Don't Have an Account ? Sign Up "}>
             <form id="register" onSubmit={handleRegister}>
                     <Input label="Email" name="email" type="email" placholder="Masukkan email" />
                     <Input label="Pasword" name="password" type="password" placholder="**********" />

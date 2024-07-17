@@ -2,7 +2,7 @@ import UserAdminView from "@/components/views/admin/Users"
 import userServices from "@/services/user"
 import { useEffect, useState } from "react"
 
-const AdminUsersPage = () => {
+const AdminUsersPage = ({setToaster}: any) => {
     const [users, setUsers] = useState([])
     useEffect(() => {
         const getAllUsers = async () => {
@@ -11,10 +11,9 @@ const AdminUsersPage = () => {
         }
         getAllUsers()
     }, [])
-    console.log(users);
     
     return (
-        <UserAdminView users={users}/>
+        <UserAdminView users={users} setToaster={setToaster}/>
     )
 }
 export default AdminUsersPage

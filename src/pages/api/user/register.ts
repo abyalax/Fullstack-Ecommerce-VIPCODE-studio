@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } else {
                 res.status(400).json({
                     status: false,
-                    statusCode:400,
+                    statusCode: 400,
                     message: "failed"
                 })
             }

@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import jwt from "jsonwebtoken"
 import GoogleProvider from "next-auth/providers/google";
-// import { loginWithGoogle, signIn } from "@/services/auth";
 import { loginWithGoogle, signIn } from "@/services/auth/services";
 
 const authOptions: NextAuthOptions = {
@@ -47,11 +47,14 @@ const authOptions: NextAuthOptions = {
                 token.fullname = user.fullname;
                 token.phone = user.phone;
                 token.role = user.role;
+                token.id = user.id;
             }
             if (account?.provider === "google") {
+                
                 const data = {
                     fullname: user.name,
                     email: user.email,
+                    image: user.image,
                     type: 'google'
                 }
 
@@ -59,6 +62,8 @@ const authOptions: NextAuthOptions = {
                     token.email = data.email;
                     token.fullname = data.fullname;
                     token.role = data.role;
+                    token.image = data.image;
+                    token.id = data.id
                 })
             }
             return token
@@ -77,6 +82,18 @@ const authOptions: NextAuthOptions = {
             if ('role' in token) {
                 session.user.role = token.role;
             }
+            if ('image' in token) {
+                session.user.image = token.image;
+            }
+            if ('id' in token) {
+                session.user.id = token.id;
+            }
+
+            const accesToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || '', {
+                algorithm: 'HS256',
+            })
+
+            session.accessToken = accesToken
             return session
         }
     },
