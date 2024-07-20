@@ -1,17 +1,17 @@
 import Instance from "@/lib/axios/instance";
 const userServices = {
-    getAllUsers: () => 
+    getAllUsers: () =>
         Instance.get("/api/user"),
-    updateUser: (id: string, data: any, token: string) => 
+    updateUser: (id: string, data: any, token: string) =>
         Instance.put(
             `/api/user/${id}`,
-             { data },
+            { data },
             {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
             }),
-    deleteUser: (id:string, token: string) => 
+    deleteUser: (id: string, token: string) =>
         Instance.delete(
             `/api/user/${id}`,
             {
@@ -20,21 +20,21 @@ const userServices = {
                 },
             }
         ),
-    getProfile: (token: string) => 
-        Instance.get("/api/user/profile",{
+    getProfile: (token: string) =>
+        Instance.get("/api/user/profile", {
             headers: {
                 Authorization: `Bearer ${token}`
             },
         }),
 
-    updateProfile: (data: any, token: string) => 
+    updateProfile: (data: any, token: string) =>
         Instance.put(
             `/api/user/profile/`,
             { data },
-        {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-        }),
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            }),
 }
 export default userServices;

@@ -14,6 +14,12 @@ const nextConfig = {
         hostname: 'firebasestorage.googleapis.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.nike.com', // Tambahkan ini
+        port: '',
+        pathname: '/**',
       }
     ],
   },
