@@ -53,8 +53,9 @@ const ProfileMemberView = ({ profile, setProfile, session, setToaster }: PropTyp
         setIsLoading('picture');
         const form = e.target as HTMLFormElement
         const file = form.image.files[0]
+        const newName ='profile.' + file.name.split('.')[1];
         if (file) {
-            uploadFile(profile.id, file, async (status: string, newImageURL: string) => {
+            uploadFile(profile.id, file, newName, 'users', async (status: string, newImageURL: string) => {
                 if (status === 'success') {
                     const data = {
                         image: newImageURL
@@ -155,7 +156,8 @@ const ProfileMemberView = ({ profile, setProfile, session, setToaster }: PropTyp
                                 onChange={(e: any) => {
                                     e.preventDefault()
                                     setChangeImage(e.currentTarget.files[0])
-                                }} />
+                                }}
+                            />
                             <Button type="submit" className={styles.profile__main__row__avatar__button}>
                                 {isLoading === 'picture' ? "Updating..." : "Update Avatar"}
                             </Button>
@@ -165,7 +167,7 @@ const ProfileMemberView = ({ profile, setProfile, session, setToaster }: PropTyp
                         <h3>Profile</h3>
                         <form onSubmit={handleChangeProfile} id="form-profile">
                             <Input name="fullname" defaultValue={profile.fullname} type="text" label="Fullname"></Input>
-                            <Input name="phone" defaultValue={profile.phone} type="number" label="Phone" placholder="Input your phone"></Input>
+                            <Input name="phone" defaultValue={profile.phone} type="number" label="Phone" placeholder="Input your phone"></Input>
                             <Input name="email" defaultValue={profile.email} type="email" label="Email" disabled></Input>
                             <Input name="role" defaultValue={profile.role} type="text" label="Role" disabled></Input>
                             <Button type="submit" variant="primary">
@@ -176,8 +178,8 @@ const ProfileMemberView = ({ profile, setProfile, session, setToaster }: PropTyp
                     <div className={styles.profile__main__row__password}>
                         <h3>Change Password</h3>
                         <form onSubmit={handleChangePassword} id="form-password">
-                            <Input name="old-password" type="password" label="Old Passsword" placholder="Enter your old password" disabled={profile.type === 'google'}></Input>
-                            <Input name="new-password" type="password" label="New Passsword" placholder="Enter your new password" disabled={profile.type === 'google'}></Input>
+                            <Input name="old-password" type="password" label="Old Passsword" placeholder="Enter your old password" disabled={profile.type === 'google'}></Input>
+                            <Input name="new-password" type="password" label="New Passsword" placeholder="Enter your new password" disabled={profile.type === 'google'}></Input>
                             <Button type="submit" variant="primary" disabled={isLoading === 'password' || profile.type === 'google'}>
                                 {isLoading === 'password' ? "Updating..." : "Update Password"}
                             </Button>
