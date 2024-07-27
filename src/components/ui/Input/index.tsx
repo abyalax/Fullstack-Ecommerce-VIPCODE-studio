@@ -8,13 +8,14 @@ type Propstypes = {
     defaultValue?: string | number;
     disabled?: boolean;
     onChange?: (e: any) => void
+    className?: string
 }
 
 const Input = (props: Propstypes) => {
-    const { label, name, type, placeholder, defaultValue, disabled, onChange } = props
+    const { label, name, type, placeholder, defaultValue, disabled, onChange, className } = props
     return (
-        <div className={styles.container}>
-            {label && <label htmlFor={name}>{label}</label>}
+        <div className={`${styles.container} ${className}`}>
+            {label && <label htmlFor={name} className={styles.container__label}>{label}</label>}
             <input
                 name={name}
                 id={name}

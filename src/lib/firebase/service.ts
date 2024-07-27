@@ -30,6 +30,7 @@ export async function retrieveDataByField(collectionName: string, field: string,
     }))
     return data
 }
+
 export async function addData(collectionName: string, data: any, callback: Function) {
     await addDoc(collection(firestore, collectionName), data)
         .then((res) => {
@@ -68,10 +69,8 @@ export async function uploadFile(id: string, file: any, newName: string, collect
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             }, (error) => {
                 if (error.code === 'storage/retry-limit-exceeded') {
-                    console.error('Upload error due to connection issues:', error);
                     alert('Connection error: Please check your internet connection and try again.');
                 } else {
-                    console.log('Upload error:', error);
                     alert('An error occurred during upload: ' + error.message);
                 }
             },

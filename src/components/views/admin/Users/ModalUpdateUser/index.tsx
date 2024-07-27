@@ -5,17 +5,17 @@ import Select from "@/components/ui/Select"
 import userServices from "@/services/user"
 import { User } from "@/types/user.type"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
+import styles from "./ModalUpdateUser.module.scss"
 
 type PropTypes = {
     setUsersData: Dispatch<SetStateAction<User[]>>
     setToaster: Dispatch<SetStateAction<{}>>
     updatedUser: User | any
     setUpdatedUser: Dispatch<SetStateAction<{}>>
-    session:any
 }
 
 const ModalUpdateUser = (props: PropTypes) => {
-    const { updatedUser, setUpdatedUser, setUsersData, setToaster, session } = props
+    const { updatedUser, setUpdatedUser, setUsersData, setToaster } = props
     const [isLoading, setIsLoading] = useState(false)
     const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -24,7 +24,7 @@ const ModalUpdateUser = (props: PropTypes) => {
         const data = {
             role: form.role.value,
         }
-        const result = await userServices.updateUser(updatedUser.id, data, session.data?.accessToken);
+        const result = await userServices.updateUser(updatedUser.id, data);
     }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ const ModalUpdateUser = (props: PropTypes) => {
         const data = {
             role:formData.get('role'),
         }
-        const result = await userServices.updateUser(updatedUser.id, data, session.data?.accessToken);
+        const result = await userServices.updateUser(updatedUser.id, data);
         if (result.status === 200) {
             setIsLoading(false);
             setUpdatedUser({});
@@ -55,11 +55,11 @@ const ModalUpdateUser = (props: PropTypes) => {
     return (
         <Modal onClose={() => setUpdatedUser({})}>
             <h1>Update User</h1>
-            <form onSubmit={handleSubmit} id="form">
-                <Input label="Email" name="email" type="email" defaultValue={updatedUser.email} disabled></Input>
-                <Input label="Fullname" name="fullname" type="text" defaultValue={updatedUser.fullname} disabled></Input>
-                <Input label="Phone" name="phone" type="number" defaultValue={updatedUser.phone} disabled></Input>
-                <Select label="Role" name="role" defaultValue={updatedUser.role} options={
+            <form onSubmit={handleSubmit} id="form" className={styles.form}>
+                <Input label="Email" name="email" type="email" defaultValue={updatedUser.email} className={styles.form__input} disabled></Input>
+                <Input label="Fullname" name="fullname" type="text" defaultValue={updatedUser.fullname} className={styles.form__input} disabled></Input>
+                <Input label="Phone" name="phone" type="number" defaultValue={updatedUser.phone} className={styles.form__input} disabled></Input>
+                <Select label="Role" name="role" defaultValue={updatedUser.role} className={styles.form__input} options={
                     [
                         { label: "Admin", value: "admin" },
                         { label: "Member", value: "member" }

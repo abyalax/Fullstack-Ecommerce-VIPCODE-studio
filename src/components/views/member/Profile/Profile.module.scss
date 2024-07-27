@@ -21,6 +21,8 @@
                 &__image {
                     width: 180px;
                     height: 180px;
+                    object-fit: cover;
+                    object-position: center;
                     background-color: #eee;
                     font-size: 64px;
                     font-weight: bold;
@@ -73,5 +75,10 @@
                 border-radius: 8px;
             }
         }
+    }
+}
+.form {
+    &__input {
+        margin: 20px 0;
     }
 }

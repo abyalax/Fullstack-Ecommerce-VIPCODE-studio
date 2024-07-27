@@ -23,7 +23,6 @@ const ModalAddProduct = (props: PropTypes) => {
     const [isLoading, setIsLoading] = useState(false)
     const [stockCount, setStockCount] = useState([{ size: '', qty: 0 }])
     const [uploadedImage, setUploadedImage] = useState<File | null>(null)
-    const session: any = useSession();
 
 
     const handleStock = (e: any, i: number, type: string) => {
@@ -41,7 +40,7 @@ const ModalAddProduct = (props: PropTypes) => {
                     const data = {
                         image: newImageURL
                     }
-                    const result = await productServices.updateProduct(id, data, session.data?.accessToken);
+                    const result = await productServices.updateProduct(id, data);
                     if (result.status === 200) {
                         setIsLoading(false);
                         setUploadedImage(null);
@@ -74,17 +73,23 @@ const ModalAddProduct = (props: PropTypes) => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsLoading(true);
-        const form = document.getElementById("form") as HTMLFormElement;
-        const formData = new FormData(form);
+        const form: any = event.target as HTMLFormElement;
+        const stock = stockCount.map((stock: { size: string, qty: number }) => {
+            return {
+                size: stock.size,
+                qty: parseInt(`${stock.qty}`)
+            }
+        })
         const data = {
-            name: formData.get("name"),
-            price: formData.get("price"),
-            category: formData.get("category"),
-            status: formData.get("status"),
-            stock: stockCount,
+            name: form.name.value,
+            price: parseInt(form.price.value),
+            description: form.description.value,
+            category: form.category.value,
+            status: form.status.value,
+            stock: stock,
             image: ''
         }
-        const result = await productServices.addProduct(data, session.data?.accessToken);
+        const result = await productServices.addProduct(data);
         if (result.status === 200) {
             uploadImage(result.data.data.id, form);
             setIsLoading(false);
@@ -98,17 +103,36 @@ const ModalAddProduct = (props: PropTypes) => {
 
     return (
         <Modal onClose={() => setModalAddProduct(false)}>
-            <h1>Update Product</h1>
-            <form onSubmit={handleSubmit} id="form" className={styles.form}>
-                <Input label="Name" name="name" type="text" placeholder="Insert Product Name"></Input>
-                <Input label="Price" name="price" type="number" placeholder="Insert Product Price"></Input>
-                <Select label="Category" name="category" options={
+            <h1>Add Product</h1>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <Input
+                    label="Name"
+                    name="name"
+                    type="text"
+                    placeholder="Insert Product Name"
+                    className={styles.form__input}
+                />
+                <Input
+                    label="Price"
+                    name="price"
+                    type="number"
+                    placeholder="Insert Product Price"
+                    className={styles.form__input}
+                />
+                <Input
+                    label="Description"
+                    name="description"
+                    type="text"
+                    placeholder="Insert Product Description"
+                    className={styles.form__input}
+                />
+                <Select label="Category" name="category" className={styles.form__input} options={
                     [
-                        { label: "Men", value: "men" },
-                        { label: "Women", value: "women" }
+                        { label: "Men", value: "Men's" },
+                        { label: "Women", value: "Women's" }
                     ]
                 } />
-                <Select label="Status" name="status" options={
+                <Select label="Status" name="status" className={styles.form__input} options={
                     [
                         { label: "Released", value: "true" },
                         { label: "Not Released", value: "false" }
@@ -142,6 +166,7 @@ const ModalAddProduct = (props: PropTypes) => {
                                 label="Size"
                                 name="size"
                                 type="text"
+                                className={styles.form__input}
                                 placeholder="Insert Size"
                                 onChange={(e) => handleStock(e, i, 'size')} />
                         </div>
@@ -150,6 +175,7 @@ const ModalAddProduct = (props: PropTypes) => {
                                 label="Qty"
                                 name="qty"
                                 type="number"
+                                className={styles.form__input}
                                 placeholder="Insert Product Quantity"
                                 onChange={(e) => handleStock(e, i, 'qty')} />
                         </div>

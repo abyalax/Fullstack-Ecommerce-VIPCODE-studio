@@ -45,9 +45,6 @@ const Toaster = (props: PropTypes) => {
         return () => clearInterval(timerRef.current)
     }, [])
 
-    console.log(lengthBar);
-    
-
     return (
         <div className={`${styles.toaster} ${styles[`toaster--${variant}`]}`}>
             <div className={styles.toaster__main}>

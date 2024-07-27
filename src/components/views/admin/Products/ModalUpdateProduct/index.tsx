@@ -5,10 +5,9 @@ import Select from "@/components/ui/Select"
 import Button from "@/components/ui/Button"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 import { Product } from '@/types/product.type'
+import { uploadFile } from "@/lib/firebase/service"
 import InputFile from "@/components/ui/InputFile"
 import productServices from "@/services/product"
-import { useSession } from "next-auth/react"
-import { uploadFile } from "@/lib/firebase/service"
 import Image from "next/image"
 
 type PropTypes = {
@@ -24,8 +23,6 @@ const ModalUpdateProduct = (props: PropTypes) => {
     const [isLoading, setIsLoading] = useState(false)
     const [stockCount, setStockCount] = useState(updatedProduct.stock)
     const [uploadedImage, setUploadedImage] = useState<File | null>(null)
-    const session: any = useSession();
-    console.log(updatedProduct);
 
 
     const handleStock = (e: any, i: number, type: string) => {
@@ -34,56 +31,23 @@ const ModalUpdateProduct = (props: PropTypes) => {
         setStockCount(newStockCount);
     }
 
-    const uploadImage = (id: string, form: any) => {
-        const file = form.image.files[0];
-        const newName = 'main.' + file.name.split('.')[1]
-        if (file) {
-            uploadFile(id, file, newName, 'products', async (status: boolean, newImageURL: string) => {
-                if (status) {
-                    const data = {
-                        image: newImageURL
-                    }
-                    const result = await productServices.updateProduct(id, data, session.data?.accessToken);
-                    if (result.status === 200) {
-                        setIsLoading(false);
-                        setUploadedImage(null);
-                        form.reset();
-                        setUpdatedProduct(false);
-                        const { data } = await productServices.getAllProducts();
-                        setProductsData(data.data)
-                        setToaster({
-                            variant: 'success',
-                            message: 'Succes Add Product'
-                        })
-                    } else {
-                        setIsLoading(false);
-                        setToaster({
-                            variant: 'danger',
-                            message: 'Failed Add Product'
-                        })
-                    }
-                } else {
-                    setIsLoading(false);
-                    setToaster({
-                        variant: 'danger',
-                        message: 'Failed Add Product'
-                    })
-                }
-            })
-        }
-    }
-
     const updateProduct = async (form: any, newImageURL: string = updatedProduct.image) => {
-        const formData = new FormData(form);
+        const stock = stockCount.map((stock: { size: string, qty: number }) => {
+            return {
+                size: stock.size,
+                qty: parseInt(`${stock.qty}`)
+            }
+        })
         const data = {
-            name: formData.get("name"),
-            price: formData.get("price"),
-            category: formData.get("category"),
-            status: formData.get("status"),
-            stock: stockCount,
+            name: form.name.value,
+            price: parseInt(form.price.value),
+            description: form.description.value,
+            category: form.category.value,
+            status: form.status.value,
+            stock,
             image: newImageURL
         }
-        const result = await productServices.updateProduct(updatedProduct.id, data, session.data?.accessToken);
+        const result = await productServices.updateProduct(updatedProduct.id, data);
         if (result.status === 200) {
             setIsLoading(false);
             setUploadedImage(null);
@@ -131,15 +95,16 @@ const ModalUpdateProduct = (props: PropTypes) => {
         <Modal onClose={() => setUpdatedProduct(false)}>
             <h1>Update Product</h1>
             <form onSubmit={handleSubmit} id="form" className={styles.form}>
-                <Input label="Name" name="name" type="text" defaultValue={updatedProduct.name} placeholder="Insert Product Name"></Input>
-                <Input label="Price" name="price" type="number" defaultValue={updatedProduct.price} placeholder="Insert Product Price"></Input>
-                <Select label="Category" name="category" defaultValue={updatedProduct.category} options={
+                <Input label="Name" name="name" type="text" defaultValue={updatedProduct.name} className={styles.form__input} />
+                <Input label="Price" name="price" type="number" defaultValue={updatedProduct.price} className={styles.form__input}/>
+                <Input label="Description" name="description" type="text" defaultValue={updatedProduct.description} className={styles.form__input}/>
+                <Select label="Category" name="category" defaultValue={updatedProduct.category} className={styles.form__input} options={
                     [
-                        { label: "Men", value: "men" },
-                        { label: "Women", value: "women" }
+                        { label: "Men", value: "Men's" },
+                        { label: "Women", value: "Women's" }
                     ]
                 } />
-                <Select label="Status" name="status" defaultValue={updatedProduct.status} options={
+                <Select label="Status" name="status" defaultValue={updatedProduct.status} className={styles.form__input} options={
                     [
                         { label: "Released", value: "true" },
                         { label: "Not Released", value: "false" }
@@ -171,6 +136,7 @@ const ModalUpdateProduct = (props: PropTypes) => {
                                 name="size"
                                 type="text"
                                 placeholder="Insert Size"
+                                className={styles.form__input}
                                 defaultValue={item.size}
                                 onChange={(e) => handleStock(e, i, 'size')} />
                         </div>
@@ -179,6 +145,7 @@ const ModalUpdateProduct = (props: PropTypes) => {
                                 label="Qty"
                                 name="qty"
                                 type="number"
+                                className={styles.form__input}
                                 defaultValue={item.qty}
                                 placeholder="Insert Product Quantity"
                                 onChange={(e) => handleStock(e, i, 'qty')} />

@@ -1,6 +1,4 @@
 import { retrieveDataById, updateData } from "@/lib/firebase/service";
-import { compare } from "bcrypt";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,21 +9,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             jwt.verify(token, process.env.NEXTAUTH_SECRET || '',
                 async (err: any, decoded: any) => {
                     if (decoded) {
-                        const profile: any = await retrieveDataById('users', decoded.id);
-                        if (profile) {
-                            profile.id = decoded.id
+                        const user: any = await retrieveDataById('users', decoded.id);
+                        if (user) {
+                            user.id = decoded.id
                             res.status(200).json({
                                 status: true,
                                 statusCode: 200,
                                 message: "success",
-                                data: profile
+                                data: user.carts
                             });
                         } else {
                             res.status(404).json({
                                 status: false,
                                 statusCode: 404,
                                 message: "Not Found",
-                                data: {},
+                                data: []
                             });
                         }
                     } else {
@@ -33,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             status: false,
                             statusCode: 403,
                             message: "Acces Denied",
-                            data: {},
+                            data: []
                         })
                     }
                 })
@@ -44,26 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         jwt.verify(token, process.env.NEXTAUTH_SECRET || '',
             async (err: any, decoded: any) => {
-                if (decoded) {
-                    if (data.newPassword) {
-                        const passwordConfirm = await compare(data.oldPassword, data.encryptedPassword)
-                        if (passwordConfirm) {
-                            res.status(200).json({
-                                status: true,
-                                statusCode: 200,
-                                message: 'success',
-                            })
-                        } else {
-                            res.status(400).json({
-                                status: false,
-                                statusCode: 400,
-                                message: "failed"
-                            })
-                        }
-                        delete data.oldPassword
-                        delete data.encryptedPassword
-                        data.password = await bcrypt.hash(data.password, 10)
-                    }
+                if (decoded) { 
                     await updateData('users', decoded.id, data, (result: boolean) => {
                         if (result) {
                             res.status(200).json({

@@ -1,8 +1,7 @@
 import { Product } from "@/types/product.type"
 import styles from "./Products.module.scss"
-import Image from "next/image"
-import { convertIDR } from "@/utils/currency"
 import Card from "./Card"
+import Link from "next/link"
 
 type PropTypes = {
     products: Product[]
@@ -37,7 +36,9 @@ const ProductView = (props: PropTypes) => {
                 </div>
                 <div className={styles.product__main__content}>
                     {products.map((product) => (
-                        <Card key={product.id} product={product}/>
+                        <Link href={`/products/${product.id}`} key={product.id}>
+                            <Card product={product} />
+                        </Link>
                     ))}
 
                 </div>

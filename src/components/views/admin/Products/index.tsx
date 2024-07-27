@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayouths"
 import ModalAddProduct from "./ModalAddProduct";
 import Button from "@/components/ui/Button";
 import styles from "./Products.module.scss";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
 import { Product } from "@/types/product.type";
@@ -55,8 +55,8 @@ const ProductsAdminView = (props: PropTypes) => {
                         </thead>
                         <tbody>
                             {productsData.map((product: any, index: number) => (
-                                <>
-                                    <tr key={product.id}>
+                                <Fragment key={product.id}>
+                                    <tr>
                                         <td rowSpan={product.stock.length}>{index + 1}</td>
                                         <td rowSpan={product.stock.length}>
                                             <Image src={product.image}
@@ -78,16 +78,16 @@ const ProductsAdminView = (props: PropTypes) => {
                                         </td>
                                     </tr>
                                     {product.stock.map((stock: { size: string, qty: number }, index: number) => (
-                                        <>
+                                        <Fragment key={index}>
                                             {index > 0 && (
-                                                <tr key={index}>
+                                                <tr>
                                                     <td>{stock.size}</td>
                                                     <td>{stock.qty}</td>
                                                 </tr>
                                             )}
-                                        </>
+                                        </Fragment>
                                     ))}
-                                </>
+                                </Fragment>
                             ))}
                         </tbody>
                     </table>

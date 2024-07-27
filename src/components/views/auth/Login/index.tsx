@@ -54,8 +54,8 @@ const LoginView = ({setToaster} : {setToaster: Dispatch<SetStateAction<{}>>}) =>
         link="/auth/register" 
         linkText={"Don't Have an Account ? Sign Up "}>
             <form id="register" onSubmit={handleRegister}>
-                    <Input label="Email" name="email" type="email" placeholder="Masukkan email" />
-                    <Input label="Pasword" name="password" type="password" placeholder="**********" />
+                    <Input label="Email" name="email" type="email" placeholder="Masukkan email" className={styles.login__input}/>
+                    <Input label="Pasword" name="password" type="password" placeholder="**********" className={styles.login__input}/>
                     <Button type="submit" className={styles.login__button}>{isLoading ? 'Loading...' : 'Login'}</Button>
                 </form>
                 <hr className={styles.login__devider} />
