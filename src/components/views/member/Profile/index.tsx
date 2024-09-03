@@ -1,4 +1,4 @@
-import MemberLayout from "@/components/layouts/MemberLayouths"
+import MemberLayout from "@/components/fragments/Sidebar/layouts/MemberLayouths"
 import styles from "./Profile.module.scss"
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -60,8 +60,8 @@ const ProfileMemberView = () => {
         setIsLoading('picture');
         const form = e.target as HTMLFormElement
         const file = form.image.files[0]
-        const newName = 'profile.' + file.name.split('.')[1];
         if (file) {
+            const newName = 'profile.' + file.name.split('.')[1];
             uploadFile(profile.id, file, newName, 'users', async (status: string, newImageURL: string) => {
                 if (status === 'success') {
                     const data = {
@@ -105,6 +105,8 @@ const ProfileMemberView = () => {
                 }
 
             })
+        } else {
+            setIsLoading('');
         }
     }
     const handleChangePassword = async (e: FormEvent<HTMLFormElement>) => {

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import authServices from "@/services/auth";
-import Authlayout from "@/components/layouts/AuthLayouts";
+import Authlayout from "@/components/fragments/Sidebar/layouts/AuthLayouts";
 import { ToasterContext } from "@/context/ToasterContext";
 
 const RegisterView = () => {

@@ -1,32 +1,17 @@
 import { signUp } from "@/services/auth/services";
+import { responseFailed, responseMethodNotAllowed, responseSuccess } from "@/utils/responseAPI";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         await signUp(req.body, (status: boolean) => {
             if (status) {
-                res.status(200).json({
-                    status: true,
-                    statusCode: 200,
-                    message: "success"
-                })
+                return responseSuccess(res)
             } else {
-                res.status(400).json({
-                    status: false,
-                    statusCode: 400,
-                    message: "failed"
-                })
+               return responseFailed(res)
             }
         })
     } else {
-        res.status(405).json({
-            status: false,
-            statusCode: 405,
-            message: "Method not Allowed"
-        })
+        return responseMethodNotAllowed(res)
     }
-    res.status(200).json({
-        status: true,
-        message: "succes"
-    })
 }

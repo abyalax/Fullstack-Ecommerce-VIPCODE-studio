@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayouths"
+import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";

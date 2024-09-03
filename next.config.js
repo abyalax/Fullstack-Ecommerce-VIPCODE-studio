@@ -17,7 +17,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'static.nike.com', // Tambahkan ini
+        hostname: 'static.nike.com', 
         port: '',
         pathname: '/**',
       }

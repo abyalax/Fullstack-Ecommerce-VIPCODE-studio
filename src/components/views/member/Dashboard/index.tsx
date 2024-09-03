@@ -1,4 +1,4 @@
-import MemberLayout from "@/components/layouts/MemberLayouths"
+import MemberLayout from "@/components/fragments/Sidebar/layouts/MemberLayouths"
 const DashboardMemberView = () => {
     return (
         <MemberLayout>

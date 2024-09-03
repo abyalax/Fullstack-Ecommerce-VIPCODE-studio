@@ -78,5 +78,14 @@
                 margin-top: 20px;
             }
         }
+        &__empty {
+            margin-top: 20px;
+            &__title {
+                font-size: 48px;
+                font-weight: 500;
+                color: #8f8f8f;
+            }
+        }
     }
+
 }

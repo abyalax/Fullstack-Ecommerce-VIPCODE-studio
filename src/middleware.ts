@@ -8,5 +8,5 @@ export function mainMiddleware() {
 
 export default withAuth(
     mainMiddleware, 
-    ["admin", "user","member"]
+    ["admin", "user","member", "cart"]
 )

@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayouths"
+import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 import ModalAddProduct from "./ModalAddProduct";
 import Button from "@/components/ui/Button";
 import styles from "./Products.module.scss";
