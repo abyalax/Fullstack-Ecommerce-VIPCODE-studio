@@ -5,20 +5,21 @@ import { convertIDR } from "@/utils/currency";
 import Button from "@/components/ui/Button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import userServices from "@/services/user";
+import { ToasterContext } from "@/context/ToasterContext";
 
 type PropTypes = {
     product: Product | any;
     cart: [] | any;
     productID: string | string[] | undefined;
-    setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 const DetailProductView = (props: PropTypes) => {
-    const { product, cart, productID, setToaster } = props;
+    const { product, cart, productID } = props;
     const { status }: any = useSession();
     const router = useRouter();
+    const {setToaster} = useContext(ToasterContext)
 
     const [selectedSize, setSelectedSize] = useState('');
     const [storedProduct, setStoredProduct] = useState<Product | null>(null);

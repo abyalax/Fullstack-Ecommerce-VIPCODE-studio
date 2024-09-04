@@ -1,13 +1,11 @@
 import Link from "next/link"
 import styles from "./AuthLayout.module.scss"
-import { Dispatch, SetStateAction } from "react"
 
 type PropTypes = {
     title?: string
     children: React.ReactNode
     link: string
     linkText?: string
-    setToaster: Dispatch<SetStateAction<{}>>
 }
 const Authlayout = (props: PropTypes) => {
     const {title, children, link, linkText} = props

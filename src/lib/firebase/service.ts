@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
-import app from "./init";
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import app from "./init";
 
 const firestore = getFirestore(app);
 const storage = getStorage(app)
@@ -81,12 +81,10 @@ export async function uploadFile(id: string, file: any, newName: string, collect
                 })
         } else {
             callback('oversize')
-
         }
     } else {
         callback('error')
     }
-
     return true
 }
 

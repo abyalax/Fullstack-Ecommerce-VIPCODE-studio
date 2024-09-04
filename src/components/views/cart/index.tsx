@@ -1,29 +1,50 @@
-import { Dispatch, Fragment, SetStateAction } from "react"
+import { Fragment, useContext, useEffect, useState } from "react"
 import styles from "./Cart.module.scss"
-import { Product } from "@/types/product.type"
 import Image from "next/image"
 import { convertIDR } from "@/utils/currency"
 import Select from "@/components/ui/Select"
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
+import userServices from "@/services/user"
+import { ToasterContext } from "@/context/ToasterContext"
+import productServices from "@/services/product"
+import { Product } from "@/types/product.type"
 
-type PropTypes = {
-    cart: any
-    products: Product[]
-    setToaster: Dispatch<SetStateAction<{}>>
-}
 
-const CartView = (props: PropTypes) => {
+const CartView = () => {
 
-    const { cart, products } = props
+    const { setToaster } = useContext(ToasterContext)
+    const [cart, setCart] = useState<Array<{ id: string, size: string, qty: number }>>([])
+
+    const [products, setProducts] = useState<Product[]>([])
+
+
+    const getCart = async () => {
+        const { data } = await userServices.getCart()
+        console.log(data.data);
+
+        setCart(data.data || [])
+    }
+
+    const getAllProducts = async () => {
+        const { data } = await productServices.getAllProducts();
+        setProducts(data.data)
+    }
+    useEffect(() => {
+        getAllProducts();
+    }, [])
+
+    useEffect(() => {
+        getCart()
+    }, [])
 
     const getProduct = (id: string) => {
-        const product = products.find((product) => product.id === id)
+        const product = products.find((product: Product) => product.id === id)
         return product
     }
 
     const getOptionSize = (id: string, selected: string) => {
-        const product = products.find((product) => product.id === id)
+        const product = products.find((product: Product) => product.id === id)
         const options = product?.stock.map((stock: { size: string, qty: number }) => {
             if (stock.qty > 0) {
                 return {
@@ -48,67 +69,97 @@ const CartView = (props: PropTypes) => {
                 0,
             )
             return total
-        } 
+        }
     }
 
+    const handleDeleteCart = async (id: string, size: string) => {
+        const newCart = cart.filter((item: { id: string, size: string }) => {
+            return item.id !== id || item.size !== size
+        })
+        try {
+            const result = await userServices.addToCart({
+                carts: newCart
+            })
+            if (result.status === 200) {
+                setToaster({
+                    variant: "success",
+                    message: "Succes Delete Item from Cart"
+                })
+                setCart(newCart)
+            }
+        } catch (error) {
+            console.log(error);
+            setToaster({
+                variant: "danger",
+                message: "Something went wrong, failed delete"
+            })
+        }
+    }
     return (
         <div className={styles.cart}>
             <div className={styles.cart__main}>
                 <h1 className={styles.cart__main__title}>Cart</h1>
-                <div className={styles.cart__main__list}>
-                    {cart !== undefined &&cart.map((item: { id: string, size: string, qty: number }) => (
-                        <Fragment key={`${item.id}-${item.size}`}>
-                            <div className={styles.cart__main__list__item}>
-                                {getProduct(item.id) &&
-                                    <Image
-                                        className={styles.cart__main__list__item__image}
-                                        src={`${getProduct(item.id)?.image}`}
-                                        alt="product"
-                                        width="150"
-                                        height="150"
-                                    />
-                                }
-                                <div className={styles.cart__main__list__item__info}>
-                                    <h4 className={styles.cart__main__list__item__info__title}>
-                                        {getProduct(item.id)?.name}
-                                    </h4>
-                                    <label className={styles.cart__main__list__item__info__category}>
-                                        {getProduct(item.id)?.category}
-                                    </label>
-                                    <div className={styles.cart__main__list__item__info__data}>
-                                        <label className={styles.cart__main__list__item__info__data__size}>
-                                            Size
-                                            <Select
-                                                name="size"
-                                                options={getOptionSize(item.id, item.size)}
-
-                                            />
+                {cart.length > 0 ? (
+                    <div className={styles.cart__main__list}>
+                        {cart !== undefined && cart.map((item: { id: string, size: string, qty: number }) => (
+                            <Fragment key={`${item.id}-${item.size}`}>
+                                <div className={styles.cart__main__list__item}>
+                                    {getProduct(item.id) &&
+                                        <Image
+                                            className={styles.cart__main__list__item__image}
+                                            src={`${getProduct(item.id)?.image}`}
+                                            alt="product"
+                                            width="150"
+                                            height="150"
+                                        />
+                                    }
+                                    <div className={styles.cart__main__list__item__info}>
+                                        <h4 className={styles.cart__main__list__item__info__title}>
+                                            {getProduct(item.id)?.name}
+                                        </h4>
+                                        <label className={styles.cart__main__list__item__info__category}>
+                                            {getProduct(item.id)?.category}
                                         </label>
-                                        <label className={styles.cart__main__list__item__info__data__qty}>
-                                            Quantity
-                                            <Input
-                                                className={styles.cart__main__list__item__info__data__qty__input}
-                                                name="qty"
-                                                type="number"
-                                                defaultValue={item.qty}
-                                            />
-                                        </label>
+                                        <div className={styles.cart__main__list__item__info__data}>
+                                            <label className={styles.cart__main__list__item__info__data__size}>
+                                                Size
+                                                <Select
+                                                    name="size"
+                                                    disabled
+                                                    options={getOptionSize(item.id, item.size)}
+                                                />
+                                            </label>
+                                            <label className={styles.cart__main__list__item__info__data__qty}>
+                                                Quantity
+                                                <Input
+                                                    className={styles.cart__main__list__item__info__data__qty__input}
+                                                    name="qty"
+                                                    type="number"
+                                                    defaultValue={item.qty}
+                                                    disabled
+                                                />
+                                            </label>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className={styles.cart__main__list__item__info__delete}
+                                            onClick={() => { handleDeleteCart(item.id, item.size) }}>
+                                            <i className='bx bxs-trash' />
+                                        </button>
                                     </div>
-                                    <button
-                                        type="button"
-                                        className={styles.cart__main__list__item__info__delete}
-                                        onClick={() => { }}>
-                                        <i className='bx bxs-trash' />
-                                    </button>
+                                    <h4 className={styles.cart__main__list__item__price}>
+                                        {convertIDR(getProduct(item.id)?.price)}
+                                    </h4>
                                 </div>
-                                <h4 className={styles.cart__main__list__item__price}>
-                                    {convertIDR(getProduct(item.id)?.price)}
-                                </h4>
-                            </div>
-                            <hr className={styles.cart__main__list__divider} />
-                        </Fragment>
-                    ))}
-                </div>
+                                <hr className={styles.cart__main__list__divider} />
+                            </Fragment>
+                        ))}
+                    </div>
+                ) : (
+                    <div className={styles.cart__main__empty}>
+                        <h1 className={styles.cart__main__empty__title}>Your Cart is Empty</h1>
+                    </div>
+                )}
             </div>
             <div className={styles.cart__summary}>
                 <h1 className={styles.cart__summary__title}>Summary</h1>
@@ -133,7 +184,7 @@ const CartView = (props: PropTypes) => {
                 <Button
                     className={styles.cart__summary__button}
                     type="button"
-                    onClick={() => { }}>
+                    onClick={() => console.log("Checkout")}>
                     Checkout
                 </Button>
             </div>

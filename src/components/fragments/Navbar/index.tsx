@@ -18,7 +18,7 @@ const NavItems = [
 ]
 
 const Navbar = () => {
-    const { data }: any = useSession();
+    const { data }: any = useSession()
     const { pathname, push } = useRouter();
     const [dropdown, setDropdown] = useState(false);
 

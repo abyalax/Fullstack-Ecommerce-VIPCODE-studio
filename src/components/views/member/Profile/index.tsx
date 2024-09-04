@@ -1,22 +1,20 @@
-import MemberLayout from "@/components/layouts/MemberLayouths"
+import MemberLayout from "@/components/fragments/Sidebar/layouts/MemberLayouths"
 import styles from "./Profile.module.scss"
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Image from "next/image";
 import { uploadFile } from "@/lib/firebase/service";
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
+import {  FormEvent, useContext, useEffect, useState } from "react";
 import userServices from "@/services/user";
 import { User } from "@/types/user.type";
+import { ToasterContext } from "@/context/ToasterContext";
 
-type PropTypes = {
-    setToaster: Dispatch<SetStateAction<{}>>
-}
-
-const ProfileMemberView = ({ setToaster }: PropTypes) => {
+const ProfileMemberView = () => {
 
     const [profile, setProfile] = useState<User | any>({})
     const [isLoading, setIsLoading] = useState('')
     const [changeImage, setChangeImage] = useState<File | any>({})
+    const {setToaster} = useContext(ToasterContext)
 
     const getProfile = async () => {
         const { data } = await userServices.getProfile()
@@ -62,8 +60,8 @@ const ProfileMemberView = ({ setToaster }: PropTypes) => {
         setIsLoading('picture');
         const form = e.target as HTMLFormElement
         const file = form.image.files[0]
-        const newName = 'profile.' + file.name.split('.')[1];
         if (file) {
+            const newName = 'profile.' + file.name.split('.')[1];
             uploadFile(profile.id, file, newName, 'users', async (status: string, newImageURL: string) => {
                 if (status === 'success') {
                     const data = {
@@ -107,6 +105,8 @@ const ProfileMemberView = ({ setToaster }: PropTypes) => {
                 }
 
             })
+        } else {
+            setIsLoading('');
         }
     }
     const handleChangePassword = async (e: FormEvent<HTMLFormElement>) => {

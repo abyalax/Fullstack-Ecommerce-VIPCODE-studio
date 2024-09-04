@@ -3,22 +3,23 @@ import styles from "./ModalAddProduct.module.scss"
 import Input from "@/components/ui/Input"
 import Select from "@/components/ui/Select"
 import Button from "@/components/ui/Button"
-import { Dispatch, FormEvent, SetStateAction, useState } from "react"
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react"
 import { Product } from '@/types/product.type'
 import InputFile from "@/components/ui/InputFile"
 import productServices from "@/services/product"
 import { useSession } from "next-auth/react"
 import { uploadFile } from "@/lib/firebase/service"
 import Image from "next/image"
+import { ToasterContext } from "@/context/ToasterContext"
 type PropTypes = {
     setModalAddProduct: Dispatch<SetStateAction<boolean>>
-    setToaster: Dispatch<SetStateAction<{}>>
     setProductsData: Dispatch<SetStateAction<Product[]>>
 }
 
 const ModalAddProduct = (props: PropTypes) => {
 
-    const { setModalAddProduct, setToaster, setProductsData } = props
+    const { setModalAddProduct, setProductsData } = props
+    const {toaster, setToaster} = useContext(ToasterContext)
 
     const [isLoading, setIsLoading] = useState(false)
     const [stockCount, setStockCount] = useState([{ size: '', qty: 0 }])

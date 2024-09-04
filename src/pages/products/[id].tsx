@@ -4,54 +4,62 @@ import userServices from "@/services/user";
 import { Product } from "@/types/product.type";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-type PropTypes = {
-    setToaster: Dispatch<SetStateAction<{}>>
-}
-
-const DetailProductPage = (props: PropTypes) => {
-
-    const { setToaster } = props
-
-    const { id } = useRouter().query
-    const [product, setProduct] = useState<Product | {}>({})
-    const [cart, setCart] = useState([])
-    const session: any = useSession()
+const DetailProductPage = () => {
+    const router = useRouter();
+    const { id } = router.query;
+    const [product, setProduct] = useState<Product | null>(null);
+    const [cart, setCart] = useState<any[]>([]);
+    const session: any = useSession();
 
     const getDetailProduct = async (id: string) => {
-        const { data } = await productServices.getDetailProduct(id)
-        data.id = id
-        setProduct(data.data)
-    }
+        try {
+            const { data } = await productServices.getDetailProduct(id);
+            if (data && data.data) {
+                setProduct(data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+        }
+    };
 
     const getCart = async () => {
-        const { data } = await userServices.getCart()
-        if (data.data) {
-            setCart(data.data)
+        try {
+            const { data } = await userServices.getCart();
+            if (data && data.data) {
+                setCart(data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching cart:", error);
         }
+    };
+
+    useEffect(() => {
+        if (!session?.accessToken) {
+            router.push('/auth/login');
+            return;
+        }
+
+        if (id) {
+            getDetailProduct(id as string);
+            getCart();
+        }
+    }, [id, router, session?.accessToken]);
+
+    if (!session?.accessToken) {
+        return null; 
     }
-
-
-    useEffect(() => {
-        getDetailProduct(id as string)
-        getCart()
-    }, [id])
-
-    useEffect(() => {
-        if (session.data?.accessToken) {
-            getCart()
-        }
-    },[session.data?.accessToken])
 
     return (
         <>
             <Head>
-                <title>Products Detail</title>
+                <title>Product Detail</title>
             </Head>
-            <DetailProductView product={product} cart={cart} productID={id} setToaster={setToaster} />
+            <DetailProductView product={product} cart={cart} productID={id as string} />
         </>
-    )
-}
-export default DetailProductPage
+    );
+};
+
+export default DetailProductPage;

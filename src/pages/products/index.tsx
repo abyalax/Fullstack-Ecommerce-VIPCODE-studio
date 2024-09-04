@@ -12,6 +12,9 @@ const ProductPage = () => {
     useEffect(() => {
         getAllProducts();
     }, [])
+
+    
+
     return (
         <>
             <Head>

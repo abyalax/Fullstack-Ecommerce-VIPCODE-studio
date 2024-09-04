@@ -4,19 +4,22 @@ import Modal from "@/components/ui/Modal"
 import Select from "@/components/ui/Select"
 import userServices from "@/services/user"
 import { User } from "@/types/user.type"
-import { Dispatch, FormEvent, SetStateAction, useState } from "react"
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react"
 import styles from "./ModalUpdateUser.module.scss"
+import { ToasterContext } from "@/context/ToasterContext"
 
 type PropTypes = {
     setUsersData: Dispatch<SetStateAction<User[]>>
-    setToaster: Dispatch<SetStateAction<{}>>
     updatedUser: User | any
     setUpdatedUser: Dispatch<SetStateAction<{}>>
 }
 
 const ModalUpdateUser = (props: PropTypes) => {
-    const { updatedUser, setUpdatedUser, setUsersData, setToaster } = props
+    const { updatedUser, setUpdatedUser, setUsersData } = props
     const [isLoading, setIsLoading] = useState(false)
+    const {setToaster} = useContext(ToasterContext)
+
+
     const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsLoading(true);

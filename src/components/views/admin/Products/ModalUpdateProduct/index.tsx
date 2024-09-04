@@ -3,26 +3,27 @@ import styles from "./ModalUpdateProduct.module.scss"
 import Input from "@/components/ui/Input"
 import Select from "@/components/ui/Select"
 import Button from "@/components/ui/Button"
-import { Dispatch, FormEvent, SetStateAction, useState } from "react"
+import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react"
 import { Product } from '@/types/product.type'
 import { uploadFile } from "@/lib/firebase/service"
 import InputFile from "@/components/ui/InputFile"
 import productServices from "@/services/product"
 import Image from "next/image"
+import { ToasterContext } from "@/context/ToasterContext"
 
 type PropTypes = {
     updatedProduct: Product | any
     setUpdatedProduct: Dispatch<SetStateAction<boolean>>
-    setToaster: Dispatch<SetStateAction<{}>>
     setProductsData: Dispatch<SetStateAction<Product[]>>
 }
 
 const ModalUpdateProduct = (props: PropTypes) => {
 
-    const { setUpdatedProduct, setToaster, setProductsData, updatedProduct } = props
+    const { setUpdatedProduct, setProductsData, updatedProduct } = props
     const [isLoading, setIsLoading] = useState(false)
     const [stockCount, setStockCount] = useState(updatedProduct.stock)
     const [uploadedImage, setUploadedImage] = useState<File | null>(null)
+    const {toaster, setToaster} = useContext(ToasterContext)
 
 
     const handleStock = (e: any, i: number, type: string) => {

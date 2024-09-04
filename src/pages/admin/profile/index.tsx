@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayouths"
+import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 
 const AdminProfilePage = () => {
     return (

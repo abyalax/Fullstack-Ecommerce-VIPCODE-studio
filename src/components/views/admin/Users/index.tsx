@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayouths"
+import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -8,11 +8,10 @@ import { User } from "@/types/user.type";
 
 type PropTypes = {
     users: User[],
-    setToaster: Dispatch<SetStateAction<{}>>,
 }
 
 const UserAdminView = (props: PropTypes) => {
-    const { users, setToaster} = props
+    const { users } = props
     const [ updatedUser, setUpdatedUser ] = useState<User | {}>({})
     const [deletedUser, setDeletedUser] = useState<User | {}>({})
     const [usersData, setUsersData] = useState<User[]>([])
@@ -62,7 +61,6 @@ const UserAdminView = (props: PropTypes) => {
                 updatedUser={updatedUser} 
                 setUpdatedUser={setUpdatedUser} 
                 setUsersData={setUsersData}
-                setToaster={setToaster}
                 />
             )}
             {Object.keys(deletedUser).length && (
@@ -70,7 +68,6 @@ const UserAdminView = (props: PropTypes) => {
                 deletedUser={deletedUser} 
                 setDeletedUser={setDeletedUser} 
                 setUsersData={setUsersData}
-                setToaster={setToaster}
                 />
             )}
         </>
