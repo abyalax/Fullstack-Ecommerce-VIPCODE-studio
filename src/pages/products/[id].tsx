@@ -12,7 +12,7 @@ const DetailProductPage = () => {
     const { id } = router.query;
     const [product, setProduct] = useState<Product | null>(null);
     const [cart, setCart] = useState<any[]>([]);
-    const session: any = useSession();
+    const session: any = useSession()
 
     const getDetailProduct = async (id: string) => {
         try {
@@ -37,7 +37,12 @@ const DetailProductPage = () => {
     };
 
     useEffect(() => {
-        if (!session?.accessToken) {
+        const token = session.data?.accessToken
+        console.log({token});
+    })
+
+    useEffect(() => {
+        if (!session.data?.accessToken) {
             router.push('/auth/login');
             return;
         }
@@ -46,11 +51,7 @@ const DetailProductPage = () => {
             getDetailProduct(id as string);
             getCart();
         }
-    }, [id, router, session?.accessToken]);
-
-    if (!session?.accessToken) {
-        return null; 
-    }
+    }, [id, router, session.data?.accessToken]);
 
     return (
         <>
