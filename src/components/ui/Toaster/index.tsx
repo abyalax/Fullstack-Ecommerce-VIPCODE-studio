@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import styles from "./Toaster.module.scss"
 import { ToasterContext } from "@/context/ToasterContext"
-import { ToasterType } from "@/types/toaster.type"
+import { ToasterType, VariantToaster } from "@/types/toaster.type"
 
-const toasterVariant: any = {
+const toasterVariant: VariantToaster = {
     success: {
         title: 'Success',
         icon: 'bx bx-check-circle',

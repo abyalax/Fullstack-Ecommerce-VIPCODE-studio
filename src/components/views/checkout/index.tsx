@@ -23,7 +23,7 @@ const CheckoutView = () => {
         const { data } = await userServices.getProfile()
         setProfile(data.data || [])
         setCarts(data.data.carts || [])
-        data.data.address.filter((address: { isMain: boolean }, id: number) => {
+        data?.data?.address?.filter((address: { isMain: boolean }, id: number) => {
             if (address.isMain) {
                 setSelectedAddress(id)
             }
@@ -80,13 +80,13 @@ const CheckoutView = () => {
                                     Note:
                                 </p>
                                 <Button type="button" onClick={() => setChangeAddress(true)}>
-                                    Change Address
+                                    {profile.address?.[0] ? 'Change Address' : 'Add New Address'}
                                 </Button>
                             </div>
                         ) : (
                             <>
                                 <h2>No Address</h2>
-                                <Button type="button">
+                                <Button type="button" onClick={() => setChangeAddress(true)}>
                                     Set Your Address
                                 </Button>
                             </>
@@ -157,13 +157,21 @@ const CheckoutView = () => {
                     <Button
                         className={styles.checkout__summary__button}
                         type="button"
-                        onClick={() => {}}
-                        >
+                        disabled={profile?.address?.[0] === undefined}
+                        onClick={() => { }}
+                    >
                         Process Payment
                     </Button>
                 </div>
             </div>
-            {changeAddress && <ModalChangeAddress address={profile?.address} setChangeAddress={setChangeAddress} setSelectedAddress={setSelectedAddress} selectedAddress={selectedAddress} />}
+            {changeAddress &&
+                <ModalChangeAddress
+                    profile={profile}
+                    setProfile={setProfile}
+                    setChangeAddress={setChangeAddress}
+                    setSelectedAddress={setSelectedAddress}
+                    selectedAddress={selectedAddress}
+                />}
         </>
     )
 }

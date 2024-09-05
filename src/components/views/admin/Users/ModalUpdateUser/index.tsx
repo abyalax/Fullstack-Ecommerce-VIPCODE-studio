@@ -19,16 +19,6 @@ const ModalUpdateUser = (props: PropTypes) => {
     const [isLoading, setIsLoading] = useState(false)
     const {setToaster} = useContext(ToasterContext)
 
-
-    const handleUpdateUser = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsLoading(true);
-        const form:any = event.target as HTMLFormElement;
-        const data = {
-            role: form.role.value,
-        }
-        const result = await userServices.updateUser(updatedUser.id, data);
-    }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);

@@ -1,7 +1,4 @@
 .modal {
-    &__title {
-        margin-bottom: 20px;
-    }
     &__address {
         width: 100%;
         border: 1px solid #ddd;
@@ -9,11 +6,44 @@
         border-radius: 8px;
         margin-top: 20px;
         display: flex;
-        flex-direction: column;
         gap: 8px;
-        cursor: pointer;
         &__active {
             border: 2px solid #000000;
+        }
+        &__info {
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            &__title {
+                margin-bottom: 10px;
+            }
+        }
+        &__action {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            &__change,
+            &__delete {
+                height: fit-content;
+                padding: 0;
+                background-color: transparent;
+                text-align: end;
+                color: #000000;
+                font-size: 1.6rem;
+            }
+        }
+    }
+    &__button {
+        margin-top: 20px;
+    }
+    &__form {
+        margin-top: 20px;
+        &__group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
     }
 }

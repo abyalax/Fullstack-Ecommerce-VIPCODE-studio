@@ -7,7 +7,6 @@ import { Dispatch, FormEvent, SetStateAction, useContext, useState } from "react
 import { Product } from '@/types/product.type'
 import InputFile from "@/components/ui/InputFile"
 import productServices from "@/services/product"
-import { useSession } from "next-auth/react"
 import { uploadFile } from "@/lib/firebase/service"
 import Image from "next/image"
 import { ToasterContext } from "@/context/ToasterContext"
@@ -71,7 +70,7 @@ const ModalAddProduct = (props: PropTypes) => {
         }
     }
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
         setIsLoading(true);
         const form: any = event.target as HTMLFormElement;
@@ -99,6 +98,12 @@ const ModalAddProduct = (props: PropTypes) => {
                 variant: 'success',
                 message: 'Succes Add Product'
             })
+        } else {
+            setIsLoading(false);
+            setToaster({
+                variant: 'danger',
+                message: 'Failed Add Product'
+            })
         }
     }
 
@@ -108,7 +113,7 @@ const ModalAddProduct = (props: PropTypes) => {
             <form onSubmit={handleSubmit} className={styles.form}>
                 <Input
                     label="Name"
-                    name="name"
+                    name="nama"
                     type="text"
                     placeholder="Insert Product Name"
                     className={styles.form__input}
