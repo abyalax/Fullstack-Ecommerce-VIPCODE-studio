@@ -1,0 +1,98 @@
+.checkout {
+    padding: 110px 20vw;
+    display: flex;
+    gap: 60px;
+    &__summary {
+        width: 25%;
+        &__item {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        &__button {
+            width: 100%;
+            margin-top: 20px;
+        }
+    }
+    &__main {
+        width: 75%;
+        &__address {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            &__title {
+                margin-bottom: 20px;
+            }
+            &__selected {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                &__note {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+        &__list {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            &__item {
+                width: 100%;
+                display: flex;
+                gap: 20px;
+                &__image {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 8px;
+                }
+                &__info {
+                    width: 100%;
+                    &__title {
+                        font-size: 18px;
+                    }
+                    &__data {
+                        &__size, &__qty {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            margin-bottom: 8px;
+                        }
+                        &__qty {
+                            &__input {
+                                width: 60px;
+                                text-align: right;
+                            }
+                        }
+                    }
+                }
+                &__price {
+                    font-size: 18px;
+                }
+            }
+            &__divider {
+                width: 100%;
+                height: 1px;
+                border: 0;
+                border-top: 1px solid #ddd;
+                margin-top: 20px;
+            }
+        }
+        &__empty {
+            margin-top: 20px;
+            &__title {
+                font-size: 48px;
+                font-weight: 500;
+                color: #8f8f8f;
+            }
+        }
+    }
+
+}

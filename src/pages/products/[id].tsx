@@ -37,11 +37,6 @@ const DetailProductPage = () => {
     };
 
     useEffect(() => {
-        const token = session.data?.accessToken
-        console.log({token});
-    })
-
-    useEffect(() => {
         if (!session.data?.accessToken) {
             router.push('/auth/login');
             return;

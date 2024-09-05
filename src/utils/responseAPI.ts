@@ -14,7 +14,7 @@ export const responseFailed = (res: NextApiResponse) => {
 }
 
 export const responseAccessDenied = (res: NextApiResponse) => {
-    responseAPI(res, false, 403, "Acces Denied")
+    responseAPI(res, false, 403, "Access Denied")
 }
 
 export const responseSuccess = (res: NextApiResponse) => {

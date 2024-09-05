@@ -2,10 +2,11 @@ import Toaster from '@/components/ui/Toaster'
 import { Lato } from 'next/font/google'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import Navbar from '../Navbar'
 import { ToasterContext } from '@/context/ToasterContext'
 import { ToasterType } from '@/types/toaster.type'
+import { useSession } from 'next-auth/react'
 
 const lato = Lato({ subsets: ['latin'], weight: ['100', '300', "400", '700', '900'] })
 const disableNavbar = ["auth", "admin", "member"]
@@ -18,6 +19,7 @@ const AppShell = (props: PropTypes) => {
     const { children } = props
     const { pathname } = useRouter();
     const { toaster }: ToasterType = useContext(ToasterContext)
+
     return (
         <>
             <Head>

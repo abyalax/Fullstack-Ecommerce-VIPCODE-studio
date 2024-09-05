@@ -1,12 +1,13 @@
 import { retrieveDataById, updateData } from "@/lib/firebase/service";
 import { responseData, responseFailed, responseNotFound, responseSuccess } from "@/utils/responseAPI";
 import { verify } from "@/utils/verifyToken";
+import { DocumentData } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         verify(req, res, false, async (decoded: { id: string }) => {
-            const user: any = await retrieveDataById('users', decoded.id)
+            const user: DocumentData | undefined = await retrieveDataById('users', decoded.id)
             if (user) {
                 return responseData(res, user.carts)
             } else {

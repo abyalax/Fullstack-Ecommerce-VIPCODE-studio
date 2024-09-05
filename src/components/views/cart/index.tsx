@@ -9,6 +9,7 @@ import userServices from "@/services/user"
 import { ToasterContext } from "@/context/ToasterContext"
 import productServices from "@/services/product"
 import { Product } from "@/types/product.type"
+import Link from "next/link"
 
 
 const CartView = () => {
@@ -21,8 +22,6 @@ const CartView = () => {
 
     const getCart = async () => {
         const { data } = await userServices.getCart()
-        console.log(data.data);
-
         setCart(data.data || [])
     }
 
@@ -181,12 +180,14 @@ const CartView = () => {
                     <p>{convertIDR(getTotalPrice())}</p>
                 </div>
                 <hr />
-                <Button
-                    className={styles.cart__summary__button}
-                    type="button"
-                    onClick={() => console.log("Checkout")}>
-                    Checkout
-                </Button>
+                <Link href={"/checkout"}>
+                    <Button
+                        className={styles.cart__summary__button}
+                        type="button"
+                    >
+                        Checkout
+                    </Button>
+                </Link>
             </div>
         </div>
     )

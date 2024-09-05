@@ -3,13 +3,14 @@ import { responseAccessDenied, responseData, responseFailed, responseMethodNotAl
 import { verify } from "@/utils/verifyToken";
 import { compare } from "bcrypt";
 import bcrypt from "bcrypt";
+import { DocumentData } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         verify(req, res, false, async (decoded: { id: string }) => {
             if (decoded) {
-                const profile: any = await retrieveDataById('users', decoded.id);
+                const profile: DocumentData | undefined = await retrieveDataById('users', decoded.id);
                 if (profile) {
                     profile.id = decoded.id
                     return responseData(res, profile)
