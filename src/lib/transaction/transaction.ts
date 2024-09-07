@@ -6,4 +6,12 @@ const createTransaction = async (params: any, callback: Function) => {
     })
 }
 
-export default createTransaction
+const getTransaction = async (token: string, callback: Function) => {
+    snap.transaction.status(token).then((res: any) => {
+        callback(res)
+    }).catch((error: any) => {
+        callback(error)
+    })
+}
+
+export {createTransaction, getTransaction}

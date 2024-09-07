@@ -76,7 +76,6 @@ const CheckoutView = () => {
             }
         }
         const { data } = await transactionServices.generateTransaction(payload)
-        console.log(data.data.token);
         const transaction_token = data.data.token
         window.snap.pay(transaction_token)
     }

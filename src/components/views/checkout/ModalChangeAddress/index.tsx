@@ -77,13 +77,11 @@ const ModalChangeAddress = (props: PropTypes) => {
         }
     }
     const handleDeleteAddress = async (id: number) => {
-        console.log(id)
         const address = profile.address
         address.splice(id, 1)
         const data = {
             address,
         }
-        console.log(data)
         try {
             const result = await userServices.updateProfile(data);
             if (result.status === 200) {
@@ -170,7 +168,6 @@ const ModalChangeAddress = (props: PropTypes) => {
                     message: 'Success Update Address'
                 })
             }
-            console.log(data.address);
         } catch (error) {
             setIsLoading(false)
             setToaster({

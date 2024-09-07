@@ -5,7 +5,11 @@ const endpoint = {
 }
 
 const transactionServices = {
+    getTransaction: (order_id: string) =>
+        Instance.get(`${endpoint.transaction}?order_id=${order_id}`),
     generateTransaction: (data: any) =>
         Instance.post(endpoint.transaction, data),
+    updateTransaction: (order_id: string) =>
+        Instance.put(`${endpoint.transaction}?order_id=${order_id}`),
 }
 export default transactionServices;
