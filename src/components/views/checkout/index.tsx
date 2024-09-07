@@ -8,7 +8,14 @@ import { Product } from "@/types/product.type"
 import styles from "./Checkout.module.scss"
 import { User } from "@/types/user.type"
 import ModalChangeAddress from "./ModalChangeAddress"
+import Script from "next/script"
+import transactionServices from "@/services/transaction"
 
+declare global {
+    interface Window {
+        snap: any
+    }
+}
 
 const CheckoutView = () => {
 
@@ -29,7 +36,6 @@ const CheckoutView = () => {
             }
         })
     }
-
     const getAllProducts = async () => {
         const { data } = await productServices.getAllProducts();
         setProducts(data.data)
@@ -37,16 +43,13 @@ const CheckoutView = () => {
     useEffect(() => {
         getAllProducts();
     }, [])
-
     useEffect(() => {
         getProfile()
     }, [])
-
     const getProduct = (id: string) => {
         const product = products.find((product: Product) => product.id === id)
         return product
     }
-
     const getTotalPrice = () => {
         if (profile?.carts !== undefined) {
             const total = profile?.carts.reduce(
@@ -60,9 +63,27 @@ const CheckoutView = () => {
             return total
         }
     }
+    const handleCheckout = async () => {
+        const payload = {
+            user: {
+                fullname: profile?.fullname,
+                email: profile?.email,
+                address: profile?.address[selectedAddress],
+            },
+            transaction: {
+                items: profile?.carts,
+                total: getTotalPrice()
+            }
+        }
+        const { data } = await transactionServices.generateTransaction(payload)
+        console.log(data.data.token);
+        const transaction_token = data.data.token
+        window.snap.pay(transaction_token)
+    }
 
     return (
         <>
+        <Script src={process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL} data-client-key = {process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} strategy="lazyOnload" />
             <div className={styles.checkout}>
                 <div className={styles.checkout__main}>
                     <h1 className={styles.checkout__main__title}>Checkout</h1>
@@ -77,7 +98,7 @@ const CheckoutView = () => {
                                     {profile?.address[selectedAddress]?.addressLine}
                                 </p>
                                 <p className={styles.checkout__main__address__selected__note}>
-                                    Note:
+                                    Note: {profile?.address[selectedAddress]?.note}
                                 </p>
                                 <Button type="button" onClick={() => setChangeAddress(true)}>
                                     {profile.address?.[0] ? 'Change Address' : 'Add New Address'}
@@ -158,7 +179,7 @@ const CheckoutView = () => {
                         className={styles.checkout__summary__button}
                         type="button"
                         disabled={profile?.address?.[0] === undefined}
-                        onClick={() => { }}
+                        onClick={() => handleCheckout()}
                     >
                         Process Payment
                     </Button>

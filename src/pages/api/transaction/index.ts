@@ -1,6 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { updateData } from '@/lib/firebase/service'
 import createTransaction from '@/lib/transaction/transaction'
-import { responseData } from '@/utils/responseAPI'
+import { responseData, responseFailed, responseSuccess } from '@/utils/responseAPI'
+import { verify } from '@/utils/verifyToken'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -9,23 +11,46 @@ type Data = {
   message: string
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`
-  console.log(generateOrderId);
-  
-  const params = {
-    "transaction_details": {
-      "order_id": generateOrderId,
-      "gross_amount": 2080000
-    },
-    "customer_details": {
-      "first_name": "budi praja",
-      "email": "budi@example.com",
-      "phone": "081234567890"
-    }
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+  if (req.method === 'POST') {
+    verify(req, res, false, async (decoded: { id: string }) => {
+      const payload = req.body
+      delete payload.user.address.isMain
+      const generateOrderId = `${Date.now()}-${Math.random().toString(16)}`
+      const params = {
+        transaction_details: {
+          order_id: generateOrderId,
+          gross_amount: payload.transaction.total
+        },
+        customer_details: {
+          first_name: payload.user.fullname,
+          email: payload.user.email,
+          phone: payload.user.address.phone
+        }
+      }
+      createTransaction(params, async (transaction: { token: string, redirect_url: string }) => {
+        const data = {
+          transaction: {
+            ...payload.transaction,
+            address: payload.user.address,
+            token: transaction.token,
+            redirect_url: transaction.redirect_url,
+            status: 'pending',
+          },
+          carts: []
+        }
+        await updateData('users', decoded.id, data, (result: boolean) => {
+          if (result) {
+            return responseData(res, {
+              token: transaction.token,
+              redirect_url: transaction.redirect_url
+            })
+          } else {
+            return responseFailed(res)
+          }
+        })
+      })
+    })
   }
-  createTransaction(params, (transaction: { token: string, redirect_url: string }) => {
-    console.log(transaction);
-    responseData(res, transaction)
-  })
+
 }

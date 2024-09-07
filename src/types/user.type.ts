@@ -7,6 +7,7 @@ export type User = {
         {
             addressLine: string,
             isMain: boolean,
+            note: string,
             phone: string,
             recipient: string
         }
