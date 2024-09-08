@@ -1,4 +1,5 @@
-import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
+import AdminLayout from "@/components/layouts/AdminLayouths"
+
 const DashboardAdminView = () => {
     return (
         <AdminLayout>

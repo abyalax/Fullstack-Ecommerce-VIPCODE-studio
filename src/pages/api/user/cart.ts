@@ -14,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return responseNotFound(res)
             }
         })
-    } else if (req.method === "PUT") {
+    } 
+    else if (req.method === "PUT") {
         const { data } = req.body
         verify(req, res, false,  async (decoded: { id: string }) => {
             await updateData('users', decoded.id, data, (result: boolean) => {

@@ -1,9 +1,10 @@
-import MemberLayout from "@/components/fragments/Sidebar/layouts/MemberLayouths"
+import MemberLayout from "@/components/layouts/MemberLayouths"
+
 const DashboardMemberView = () => {
     return (
         <MemberLayout>
             <div>
-                Admin Page
+                Member Dashboard Page
             </div>
         </MemberLayout>
     )

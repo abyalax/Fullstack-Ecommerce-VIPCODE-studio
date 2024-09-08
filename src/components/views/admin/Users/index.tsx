@@ -1,10 +1,10 @@
-import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 import Button from "@/components/ui/Button";
 import styles from "./Users.module.scss";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalDeleteUser from "./ModalDeleteUser";
 import { User } from "@/types/user.type";
+import AdminLayout from "@/components/layouts/AdminLayouths";
 
 type PropTypes = {
     users: User[],

@@ -11,12 +11,6 @@ import ModalChangeAddress from "./ModalChangeAddress"
 import Script from "next/script"
 import transactionServices from "@/services/transaction"
 
-declare global {
-    interface Window {
-        snap: any
-    }
-}
-
 const CheckoutView = () => {
 
     const [profile, setProfile] = useState<User>()

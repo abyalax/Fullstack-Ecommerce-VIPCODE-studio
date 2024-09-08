@@ -31,7 +31,6 @@ export default function WithAuth(
             }
         }
         return middleware(req, next)
-        
         }
     }
 }

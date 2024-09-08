@@ -1,4 +1,3 @@
-import MemberLayout from "@/components/fragments/Sidebar/layouts/MemberLayouths"
 import styles from "./Profile.module.scss"
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -8,6 +7,7 @@ import {  FormEvent, useContext, useEffect, useState } from "react";
 import userServices from "@/services/user";
 import { User } from "@/types/user.type";
 import { ToasterContext } from "@/context/ToasterContext";
+import MemberLayout from "@/components/layouts/MemberLayouths";
 
 const ProfileMemberView = () => {
 

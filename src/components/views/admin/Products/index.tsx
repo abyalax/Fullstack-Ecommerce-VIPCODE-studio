@@ -1,4 +1,3 @@
-import AdminLayout from "@/components/fragments/Sidebar/layouts/AdminLayouths"
 import ModalAddProduct from "./ModalAddProduct";
 import Button from "@/components/ui/Button";
 import styles from "./Products.module.scss";
@@ -8,6 +7,7 @@ import { convertIDR } from "@/utils/currency";
 import { Product } from "@/types/product.type";
 import ModalUpdateProduct from "./ModalUpdateProduct";
 import ModalDeleteProduct from "./ModalDeleteProduct";
+import AdminLayout from "@/components/layouts/AdminLayouths";
 
 type PropTypes = {
     products: Product[],

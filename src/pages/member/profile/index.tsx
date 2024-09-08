@@ -1,4 +1,4 @@
-import ProfileMemberView from "@/components/views/member/Profile"
+import ProfileMemberView from "@/components/views/member/profile"
 
 const ProfilePage = () => {
     return <ProfileMemberView />

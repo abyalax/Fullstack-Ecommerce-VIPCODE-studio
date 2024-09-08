@@ -23,7 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })
         }
 
-    } else if (req.method === "POST") {
+    }
+    else if (req.method === "POST") {
         verify(req, res, true, async () => {
             let data = req.body
             data.created_at = new Date();
@@ -50,7 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             })
         })
-    } else if (req.method === "PUT") {
+    }
+    else if (req.method === "PUT") {
         const { product }: any = req.query
         const { data } = req.body
         verify(req, res, true, async (decoded: { id: string }) => {
@@ -70,7 +72,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             })
         })
-    } else if (req.method === "DELETE") {
+    }
+    else if (req.method === "DELETE") {
         const { product }: any = req.query
         verify(req, res, true, async (decoded: { id: string }) => {
             await deleteData('products', product[0], (result: boolean) => {
