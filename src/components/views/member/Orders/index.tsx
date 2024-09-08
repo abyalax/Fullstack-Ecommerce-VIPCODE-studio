@@ -6,9 +6,22 @@ import userServices from "@/services/user";
 import { convertIDR } from "@/utils/currency";
 import Script from "next/script";
 import MemberLayout from "@/components/layouts/MemberLayouths";
+import ModalDetailOrder from "./ModalDetailOrder";
+import productServices from "@/services/product";
+import { Product } from "@/types/product.type";
 
 const MemberOrdersView = () => {
     const [profile, setProfile] = useState<User | any>({})
+    const [detailOrder, setDetailOrder] = useState<any>({})
+    const [products, setProducts] = useState<Product[]>([])
+
+    const getAllProducts = async () => {
+        const { data } = await productServices.getAllProducts();
+        setProducts(data.data)
+    }
+    useEffect(() => {
+        getAllProducts();
+    }, [])
 
     const getProfile = async () => {
         const { data } = await userServices.getProfile()
@@ -48,7 +61,7 @@ const MemberOrdersView = () => {
                                             <Button
                                                 type="button"
                                                 className={styles.orders__table__action__edit}
-                                                onClick={() => {}}>
+                                                onClick={() => setDetailOrder(transaction)}>
                                                 <i className='bx bx-dots-vertical-rounded' />
                                             </Button>
                                             <Button
@@ -66,6 +79,9 @@ const MemberOrdersView = () => {
                     </table>
                 </div>
             </MemberLayout>
+            {Object.keys(detailOrder).length > 0 && (
+                <ModalDetailOrder setDetailOrder={setDetailOrder} detailOrder={detailOrder} products= {products}/>
+            )}
         </>
     )
 }
