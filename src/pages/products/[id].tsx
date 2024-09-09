@@ -1,11 +1,12 @@
 import DetailProductView from "@/components/views/detailProduct";
+import { ToasterContext } from "@/context/ToasterContext";
 import productServices from "@/services/product";
 import userServices from "@/services/user";
 import { Product } from "@/types/product.type";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const DetailProductPage = () => {
     const router = useRouter();
@@ -13,6 +14,7 @@ const DetailProductPage = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [cart, setCart] = useState<any[]>([]);
     const session: any = useSession()
+    const { setToaster } = useContext(ToasterContext)
 
     const getDetailProduct = async (id: string) => {
         try {
@@ -21,7 +23,10 @@ const DetailProductPage = () => {
                 setProduct(data.data);
             }
         } catch (error) {
-            console.error("Error fetching product details:", error);
+            setToaster({
+                title: 'error',
+                message: 'Failed get cart',
+            })
         }
     };
 
@@ -32,7 +37,10 @@ const DetailProductPage = () => {
                 setCart(data.data);
             }
         } catch (error) {
-            console.error("Error fetching cart:", error);
+            setToaster({
+                title: 'error',
+                message: 'Failed get cart',
+            })
         }
     };
 
@@ -41,7 +49,6 @@ const DetailProductPage = () => {
             router.push('/auth/login');
             return;
         }
-
         if (id) {
             getDetailProduct(id as string);
             getCart();

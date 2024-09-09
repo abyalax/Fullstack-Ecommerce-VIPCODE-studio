@@ -87,7 +87,6 @@ const CartView = () => {
                 setCart(newCart)
             }
         } catch (error) {
-            console.log(error);
             setToaster({
                 variant: "danger",
                 message: "Something went wrong, failed delete"

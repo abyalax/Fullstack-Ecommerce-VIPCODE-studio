@@ -21,7 +21,7 @@ const ModalDetailOrder = (props: PropTypes) => {
 
     return (
         <Modal onClose={() => setDetailOrder({})}>
-            <h1 className={styles.modal__title}>Are U Sure ? </h1>
+            <h1 className={styles.modal__title}>Detail Order </h1>
             <h2 className={styles.modal__subtitle}>Data Order</h2>
             <div className={styles.modal__data}>
                 <div className={styles.modal__data__item}>

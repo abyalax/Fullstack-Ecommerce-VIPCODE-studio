@@ -1,4 +1,4 @@
-import ProductsAdminView from "@/components/views/admin/Products"
+import ProductsAdminView from "@/components/views/admin/products"
 import productServices from "@/services/product"
 import { useEffect, useState } from "react"
 

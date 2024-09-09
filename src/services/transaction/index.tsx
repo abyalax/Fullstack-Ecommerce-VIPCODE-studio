@@ -5,6 +5,8 @@ const endpoint = {
 }
 
 const transactionServices = {
+    getAllTransaction: () => 
+        Instance.get(`${endpoint.transaction}/admin`),
     getTransaction: (order_id: string) =>
         Instance.get(`${endpoint.transaction}?order_id=${order_id}`),
     generateTransaction: (data: any) =>

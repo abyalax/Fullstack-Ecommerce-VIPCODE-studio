@@ -69,6 +69,7 @@ const ModalChangeAddress = (props: PropTypes) => {
                 })
             }
         } catch (error) {
+ 
             setIsLoading(false)
             setToaster({
                 variant: 'danger',
@@ -97,6 +98,7 @@ const ModalChangeAddress = (props: PropTypes) => {
                 })
             }
         } catch (error) {
+ 
             setIsLoading(false)
             setToaster({
                 variant: 'danger',
@@ -129,6 +131,7 @@ const ModalChangeAddress = (props: PropTypes) => {
                 })
             }
         } catch (error) {
+ 
             setIsLoading(false)
             setToaster({
                 variant: 'danger',
@@ -169,6 +172,7 @@ const ModalChangeAddress = (props: PropTypes) => {
                 })
             }
         } catch (error) {
+ 
             setIsLoading(false)
             setToaster({
                 variant: 'danger',
